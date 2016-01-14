@@ -18,7 +18,6 @@ import com.nk.db.util.DataSource;
 /**
  * 删除空表
  * @author young
- * aaa
  */
 public abstract class DeleteTablesUtil {
 
