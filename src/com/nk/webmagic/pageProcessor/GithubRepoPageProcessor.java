@@ -28,7 +28,8 @@ public class GithubRepoPageProcessor implements PageProcessor {
         // 部分二：定义如何抽取页面信息，并保存下来
     	if(!set.contains(page.getRequest().getUrl())){
     		set.add(page.getRequest().getUrl());
-        	if(page.getHtml()!=null&&page.getHtml().getFirstSourceText()!=null&&page.getHtml().getFirstSourceText().contains("鈴木心春")){
+    		System.out.println(page.getRequest().getUrl());
+        	if(page.getHtml()!=null&&page.getHtml().getFirstSourceText()!=null&&page.getHtml().getFirstSourceText().contains("aaa")){
         		this.save(page.getRequest().getUrl());
         	}
     	}
@@ -49,7 +50,7 @@ public class GithubRepoPageProcessor implements PageProcessor {
     	Properties pro = new Properties();
 		pro.put("jdbc.driver", "oracle.jdbc.driver.OracleDriver");
 		
-		pro.put("jdbc.url", "jdbc:oracle:thin:@192.168.31.42:1521:oradb");
+		pro.put("jdbc.url", "jdbc:oracle:thin:@127.0.0.1:1521:oradb");
 		pro.put("user", "XMGDD2");
 		pro.put("password", "DDGMX");
 		pro.put("remarksReporting", "true");
@@ -72,9 +73,9 @@ public class GithubRepoPageProcessor implements PageProcessor {
 
         Spider.create(new GithubRepoPageProcessor())
                 //从"http://www.ifeng.com/"开始抓
-                .addUrl("http://keet.fulidown.me/pw/thread.php?fid=3")
+                .addUrl("http://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=monline_dg&wd=%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6&oq=%E5%A4%9A%E5%B1%8F%E4%BA%91%E4%BA%AB&rsv_pq=83f5f74a0001fcfc&rsv_t=1631s4AfiU37CvakQP8n9O%2B4ozQKql5bWsXgqx0oyVnOSeNdYXOAc%2Fc1dei9ZZGzIw&rsv_enter=1&rsv_sug3=3&rsv_sug1=2&bs=%E5%A4%9A%E5%B1%8F%E4%BA%91%E4%BA%AB")
                 //开启5个线程抓取
-                .thread(15)
+                .thread(30)
                 //启动爬虫
                 .run();
     }
