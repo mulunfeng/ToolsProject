@@ -6,6 +6,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileUtil {
+	/**
+	 * 
+	* @Description: 写入到文件
+	* @Title: writeToFile 
+	* @param path
+	* @param data void
+	* @throws
+	* @date 2016年4月27日 下午4:41:04
+	 */
 	public static void writeToFile(String path,String data){
 		BufferedWriter bufferedWriter = null;
         try {
