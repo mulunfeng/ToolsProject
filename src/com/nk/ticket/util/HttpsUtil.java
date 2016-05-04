@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -46,49 +50,44 @@ public class HttpsUtil {
 	* @Title: getMethod 
 	* @param urlString
 	* @return String
+	 * @throws NoSuchProviderException 
+	 * @throws NoSuchAlgorithmException 
+	 * @throws IOException 
+	 * @throws KeyManagementException 
 	* @throws
 	* @date 2016年1月29日 下午12:43:52
 	 */
-	public static String getMethod(String urlString) {
+	public static String getMethod(String urlString) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, KeyManagementException {
 		String repString= null;
-        try {
+        URL url = new URL(urlString);
 
 
-            URL url = new URL(urlString);
+        /*
+         * use ignore host name verifier
+         */
+        HttpsURLConnection.setDefaultHostnameVerifier(ignoreHostnameVerifier);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
 
-            /*
-             * use ignore host name verifier
-             */
-            HttpsURLConnection.setDefaultHostnameVerifier(ignoreHostnameVerifier);
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        // Prepare SSL Context
+        TrustManager[] tm = { ignoreCertificationTrustManger };
+        SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+        sslContext.init(null, tm, new java.security.SecureRandom());
 
 
-            // Prepare SSL Context
-            TrustManager[] tm = { ignoreCertificationTrustManger };
-            SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
-            sslContext.init(null, tm, new java.security.SecureRandom());
+        // 从上述SSLContext对象中得到SSLSocketFactory对象
+        SSLSocketFactory ssf = sslContext.getSocketFactory();
+        connection.setSSLSocketFactory(ssf);
+        
+        InputStream reader = connection.getInputStream();
 
-
-            // 从上述SSLContext对象中得到SSLSocketFactory对象
-            SSLSocketFactory ssf = sslContext.getSocketFactory();
-            connection.setSSLSocketFactory(ssf);
-            
-            InputStream reader = connection.getInputStream();
-
-            
-            // result.setResponseData(bytes);
-            repString = null;
-            repString = convertStreamToString(reader);
-            reader.close();
-            
-            connection.disconnect();
-        }catch (UnknownHostException ex) {
-            System.out.println("check the net");
-        }  catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-        }
+        
+        // result.setResponseData(bytes);
+        repString = null;
+        repString = convertStreamToString(reader);
+        reader.close();
+        
+        connection.disconnect();
         return repString;
     }
 	 /**
