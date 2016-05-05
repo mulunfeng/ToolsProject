@@ -37,38 +37,38 @@ public class TicketPageUtil {
 						String newString = null;
 						try {
 							newString = new String(HttpsUtil.getMethod(url));
-						} catch (Exception e1) {
-							JPushHelper.getInstance().pushRegistration(strs, "程序异常", e1.getMessage());
-							e1.printStackTrace();
-						}
-						Map<String,Object> map = JsonUtils.toMap(newString);
-						JSONObject trainsStr = (JSONObject) map.get("data");
-						if(trainsStr!=null){
-							Map<String,Object> trainMap = JsonUtils.toMap(trainsStr.toString());
-							JSONArray trainListStr = (JSONArray) trainMap.get("datas");
-							if(trainListStr!=null){
-								List<Ticket> list = (List<Ticket>)JsonUtils.stringToObj(trainListStr.toString(), new TypeReference<List<Ticket>>(){});
-								if(list!=null){
-									for(Ticket ticket:list){
-										for(String train:TRAINLIST){
-											if(ticket.getStation_train_code().equals(train)){
-												System.out.println(train+" surplus of "+ticket.getYw_num()+"");
-												if(!ywNum.equals(ticket.getYw_num())){
-													System.out.println("send msg!!");
-													ywNum = ticket.getYw_num();
-													JPushHelper.getInstance().pushRegistration(strs, "车票提醒", train+"次车还剩"+ticket.getYw_num()+"张");
+							Map<String,Object> map = JsonUtils.toMap(newString);
+							JSONObject trainsStr = (JSONObject) map.get("data");
+							if(trainsStr!=null){
+								Map<String,Object> trainMap = JsonUtils.toMap(trainsStr.toString());
+								JSONArray trainListStr = (JSONArray) trainMap.get("datas");
+								if(trainListStr!=null){
+									List<Ticket> list = (List<Ticket>)JsonUtils.stringToObj(trainListStr.toString(), new TypeReference<List<Ticket>>(){});
+									if(list!=null){
+										for(Ticket ticket:list){
+											for(String train:TRAINLIST){
+												if(ticket.getStation_train_code().equals(train)){
+													System.out.println(train+" surplus of "+ticket.getYw_num()+"");
+													if(!ywNum.equals(ticket.getYw_num())){
+														System.out.println("send msg!!");
+														ywNum = ticket.getYw_num();
+														JPushHelper.getInstance().pushRegistration(strs, "车票提醒", train+"次车还剩"+ticket.getYw_num()+"张");
+													}
+													break;
 												}
-												break;
 											}
 										}
 									}
 								}
 							}
-						}
-						try {
-							Thread.sleep(2 * 5000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+							try {
+								Thread.sleep(2 * 5000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						} catch (Exception e1) {
+							JPushHelper.getInstance().pushRegistration(strs, "程序异常", e1.getMessage());
+							e1.printStackTrace();
 						}
 					}
 				}
