@@ -17,6 +17,9 @@ import com.nk.ticket.util.HttpsUtil;
 import com.nk.ticket.util.JPushHelper;
 import com.nk.ticket.util.JsonUtils;
 
+/**
+ * 车票监控
+ */
 public class TicketPageUtil {
 
 	private static final List<String> URILIST = new ArrayList<String>(){{add("https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate=2016-06-11&from_station=NUH&to_station=BJP");}};  
