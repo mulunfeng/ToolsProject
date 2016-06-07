@@ -32,7 +32,7 @@ import com.nk.db.util.DataSource;
 public abstract class SearchDatabaseUtil {
  
 	//要检索的字符串
-	private static String[] SEARCH_STR = {"庆祝厦门供电段"};
+	private static String[] SEARCH_STR = {"默认搜索内容"};
 	//日志位置
 	private static String PATH = "D:/search_database.log";
 	public static void main(String[] args) {

@@ -11,7 +11,7 @@ import com.nk.baidu.util.FileUtil;
 
 public class Baidu {
 
-	private final static String KEY_WORDS = "庆祝厦门供电段";
+	private final static String KEY_WORDS = "搜索内容";
 	private final static String FIND_DIR = "F:\\XMGDD";
 	public static void main(String[] args) {
 		List<File> listFile = findFiles(FIND_DIR);
