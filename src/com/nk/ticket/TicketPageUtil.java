@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.nk.email.send.SendEmailUtil;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,8 +23,8 @@ import com.nk.ticket.util.JsonUtils;
  */
 public class TicketPageUtil {
 
-	private static final List<String> URILIST = new ArrayList<String>(){{add("https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate=2016-06-11&from_station=NUH&to_station=BJP");}};  
-	private static final List<String> TRAINLIST = new ArrayList<String>(){{add("Z52");}};  
+	private static final List<String> URILIST = new ArrayList<String>(){{add("https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate=2016-10-01&from_station=BJP&to_station=ZZF");}};
+	private static final List<String> TRAINLIST = new ArrayList<String>(){{add("G89");}};
 	public static final boolean flag = true;
 	public static void main(String[] args) throws IllegalStateException, IOException {
 		final List<String> strs = new ArrayList<String>();
@@ -46,16 +47,18 @@ public class TicketPageUtil {
 								Map<String,Object> trainMap = JsonUtils.toMap(trainsStr.toString());
 								JSONArray trainListStr = (JSONArray) trainMap.get("datas");
 								if(trainListStr!=null){
-									List<Ticket> list = (List<Ticket>)JsonUtils.stringToObj(trainListStr.toString(), new TypeReference<List<Ticket>>(){});
+									List<Ticket> list = JsonUtils.stringToObj(trainListStr.toString(), new TypeReference<List<Ticket>>(){});
 									if(list!=null){
 										for(Ticket ticket:list){
 											for(String train:TRAINLIST){
 												if(ticket.getStation_train_code().equals(train)){
-													System.out.println(train+" surplus of "+ticket.getYw_num()+"");
-													if(!ywNum.equals(ticket.getYw_num())){
+													System.out.println(train+" surplus of "+ticket.getZe_num()+"");
+													if(!ywNum.equals(ticket.getZe_num())){
 														System.out.println("send msg!!");
-														ywNum = ticket.getYw_num();
-														JPushHelper.getInstance().pushRegistration(strs, "车票提醒", train+"次车还剩"+ticket.getYw_num()+"张");
+														ywNum = ticket.getZe_num();
+														System.out.println("车票提醒"+ train+"次车还剩"+ticket.getZe_num()+"张");
+														SendEmailUtil.sendEmal("1015947808@qq.com", "车票提醒"+ticket.getZe_num()+"张", "车票提醒"+ train+"次车还剩"+ticket.getZe_num()+"张");
+//														JPushHelper.getInstance().pushRegistration(strs, "车票提醒", train+"次车还剩"+ticket.getYw_num()+"张");
 													}
 													break;
 												}
@@ -65,7 +68,7 @@ public class TicketPageUtil {
 								}
 							}
 							try {
-								Thread.sleep(2 * 5000);
+								Thread.sleep(5000);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
