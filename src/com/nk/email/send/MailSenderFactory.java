@@ -12,13 +12,12 @@ public class MailSenderFactory {
     /**
      * 获取邮箱
      *
-     * @param type 邮箱类型
      * @return 符合类型的邮箱
      */
     public static SimpleMailSender getSender() {
         if (serviceSms == null) {
-            serviceSms = new SimpleMailSender("mulunfeng@126.com",
-                    "justfuckyou");
+            serviceSms = new SimpleMailSender("email@126.com",
+                    "your password");
         }
         return serviceSms;
     }
