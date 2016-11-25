@@ -1,22 +1,13 @@
 package com.nk.excel.util;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -79,6 +70,143 @@ public class FileUtil {
 			return false;
 		}
 		return true;
+	}
+
+	private static Map<String,String> head2FileType = new HashMap<String,String>();
+	static{
+		head2FileType.put("FFD8FFE1", "jpg");
+		head2FileType.put("89504E47", "png");
+		head2FileType.put("47494638 ", "gif");
+		head2FileType.put("49492A00", "tif");
+		head2FileType.put("424D", "bmp");
+		head2FileType.put("41433130", "dwg");
+		head2FileType.put("38425053 ", "psd");
+		head2FileType.put("7B5C727466", "rtf");
+		head2FileType.put("3C3F786D6C", "xml");
+		head2FileType.put("68746D6C3E ", "html");
+		head2FileType.put("44656C69766572792D646174", "eml");
+		head2FileType.put("CFAD12FEC5FD746F ", "dbx");
+		head2FileType.put("2142444E", "pst");
+		head2FileType.put("D0CF11E0", "xls/doc");
+		head2FileType.put("5374616E64617264204A", "mdb");
+		head2FileType.put("FF575043", "wpd");
+		head2FileType.put("252150532D41646F6265", "eps/ps");
+		head2FileType.put("255044462D312E", "pdf");
+		head2FileType.put("E3828596", "pwl");
+		head2FileType.put("504B0304", "zip");
+		head2FileType.put("52617221", "rar");
+		head2FileType.put("57415645", "wav");
+		head2FileType.put("41564920", "avi");
+		head2FileType.put("2E7261FD", "ram");
+		head2FileType.put("2E524D46", "rm");
+		head2FileType.put("000001BA", "mpg");
+		head2FileType.put("000001B3", "mpg");
+		head2FileType.put("6D6F6F76", "mov");
+		head2FileType.put("3026B2758E66CF11", "asf");
+		head2FileType.put("4D546864", "mid");
+	}
+
+	/**
+	 * 获取文件内容(无法识别xlxs、docx等新版文档格式)
+	 *
+	 * @param is
+	 * @return
+	 * @throws IOException
+	 */
+	public static String getTypeByStream(InputStream is) throws IOException {
+		byte[] b = new byte[4];
+		is.read(b, 0, b.length);
+		String type = bytesToHexString(b).toUpperCase();
+		if (StringUtils.isNotBlank(type)) {
+			return head2FileType.get(type);
+		}
+		return type;
+	}
+
+	/**
+	 * 根据File获取文件内容，如果无法获取文件头信息则返回文件名后缀
+	 * @param file
+	 * @return
+     */
+	public static String getTypeByFile(File file) {
+		if (file == null || !file.exists()) {
+			return null;
+		}
+		try {
+			InputStream inputStream = new FileInputStream(file);
+			String streamType = getTypeByStream(inputStream);
+			String path = file.getAbsolutePath();
+			String suffix = path != null && path.contains(".") ? path.substring(path.lastIndexOf(".") + 1) : null;
+			if ("zip".equals(streamType)) {
+				if (suffix!=null && (suffix.equals("docx")
+					||suffix.equals("xlsx"))) {
+					return "xls/doc";
+				}
+			}
+			if (streamType == null && suffix != null) {
+				return suffix;
+			}
+			return streamType;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	/**
+	 * byte数组转换成16进制字符串
+	 *
+	 * @param src
+	 * @return
+	 */
+	public static String bytesToHexString(byte[] src) {
+		StringBuilder stringBuilder = new StringBuilder();
+		if (src == null || src.length <= 0) {
+			return null;
+		}
+		for (int i = 0; i < src.length; i++) {
+			int v = src[i] & 0xFF;
+			String hv = Integer.toHexString(v);
+			if (hv.length() < 2) {
+				stringBuilder.append(0);
+			}
+			stringBuilder.append(hv);
+		}
+		return stringBuilder.toString();
+	}
+
+	/**
+	 *
+	 * @Description: 写入到文件
+	 * @Title: writeToFile
+	 * @param path
+	 * @param data void
+	 * @throws
+	 * @date 2016年4月27日 下午4:41:04
+	 */
+	public static void writeToFile(String path,String data){
+		BufferedWriter bufferedWriter = null;
+		try {
+			bufferedWriter = new BufferedWriter(new FileWriter(path,true));
+			bufferedWriter.write(data);
+			bufferedWriter.newLine();
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (bufferedWriter != null) {
+					bufferedWriter.flush();
+					bufferedWriter.close();
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -346,7 +474,7 @@ public class FileUtil {
 	/**
 	 * 删除文件夹里面的所有文件和子文件夹,但不删除自己本身
 	 * 
-	 * @param file
+	 * @param
 	 * @return
 	 */
 	public static boolean deleteFromDir(File dir) {
@@ -575,8 +703,16 @@ public class FileUtil {
 	
 	
 	public static void main(String[] args) {
-		File f = new File("F:/Workspace_Product\\ZCMS\\UI\\Framework\\Controls/../../..");
-		System.out.println(f.list().length);
-		System.out.println(f.getAbsolutePath());
-	}
+		File f = new File("C:\\Users\\zhangyuyang1\\Desktop\\单点登录附件.docx");
+//		System.out.println(f.list().length);
+//		System.out.println(f.getAbsolutePath());
+        try {
+            InputStream inputStream = new FileInputStream(f);
+			System.out.println(FileUtil.getTypeByFile(f));
+		} catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

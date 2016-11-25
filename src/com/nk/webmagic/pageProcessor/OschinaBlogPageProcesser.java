@@ -1,7 +1,10 @@
 package com.nk.webmagic.pageProcessor;
 
 import java.util.List;
+import java.util.Properties;
 
+import com.nk.db.app.SearchDatabaseUtil;
+import com.nk.db.entity.Table;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -37,5 +40,6 @@ public class OschinaBlogPageProcesser implements PageProcessor {
         //启动爬虫
         .run();
     }
+
 
 }

@@ -83,7 +83,6 @@ public class HttpsUtil {
 
         
         // result.setResponseData(bytes);
-        repString = null;
         repString = convertStreamToString(reader);
         reader.close();
         

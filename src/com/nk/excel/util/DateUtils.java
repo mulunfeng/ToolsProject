@@ -325,6 +325,12 @@ public class DateUtils {
 		return compareTime(time1, time2, Format_Time);
 	}
 
+	public static void main(String[] args) {
+		String time1 = "05:24";
+		String time2 = "24:00";
+		System.out.println(DateUtils.compareTime(time1,time2));
+	}
+
 	/**
 	 * 以指定格式解析两个字符串，并比较得到的两个日期的大小
 	 * 
@@ -803,7 +809,4 @@ public class DateUtils {
 		return c.get(Calendar.YEAR);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(DateUtils.isDate("2015:01:01"));
-	}
 }

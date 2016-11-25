@@ -16,8 +16,8 @@ public class MailSenderFactory {
      */
     public static SimpleMailSender getSender() {
         if (serviceSms == null) {
-            serviceSms = new SimpleMailSender("email@126.com",
-                    "your password");
+            serviceSms = new SimpleMailSender("mulunfeng@126.com",
+                    "*******");
         }
         return serviceSms;
     }

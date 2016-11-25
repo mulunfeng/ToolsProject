@@ -17,10 +17,10 @@ import com.nk.excel.util.ExcelReaderUtils;
 public class Test {
 
 	public static void main(String[] args) throws ClassNotFoundException, InvalidFormatException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		File templateFile = new File("C://Users//young//git//ToolsProject//target//classes//com//nk//excel//tempEquAndParts.xls");
+		File templateFile = new File("src/com/nk/excel/template/tempEquAndParts.xls");
 		// 导入
 		IDetectHandler detectHandler = new ExcelImpHandler(true,"com.nk.excel.entity.EquAndParts", templateFile);
-		ExcelReaderUtils.readExcelAllSheet("C://Users//young//git//ToolsProject//target//classes//com//nk//excel//equAndParts.xls", detectHandler);
+		ExcelReaderUtils.readExcelAllSheet("src/com/nk/excel/template/equAndParts.xls", detectHandler);
 		List<String> errList = detectHandler.getErrorMessages();
 
 		// 将数据导入到数据库中

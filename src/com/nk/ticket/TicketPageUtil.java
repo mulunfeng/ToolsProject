@@ -5,10 +5,13 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.nk.email.send.SendEmailUtil;
+import com.nk.excel.util.DateUtils;
+import com.nk.excel.util.StringUtil;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,8 +26,15 @@ import com.nk.ticket.util.JsonUtils;
  */
 public class TicketPageUtil {
 
-	private static final List<String> URILIST = new ArrayList<String>(){{add("https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate=2016-10-01&from_station=BJP&to_station=ZZF");}};
-	private static final List<String> TRAINLIST = new ArrayList<String>(){{add("G89");}};
+	private static final List<String> URILIST = new ArrayList<String>(){{add("https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate=2016-10-01&from_station=BJP&to_station=WNY");}};
+	private static Map<String, String> TRAINLIST = new HashMap<String, String>();
+	static {
+//		TRAINLIST.put("G89", "G89");
+//		TRAINLIST.put("G307", "G307");
+//		TRAINLIST.put("G81", "G81");
+//		TRAINLIST.put("G83", "G83");
+	}
+	private static final List<String> TIMERANGE = new ArrayList<String>(){{add("07:00");add("18:00");}};
 	public static final boolean flag = true;
 	public static void main(String[] args) throws IllegalStateException, IOException {
 		final List<String> strs = new ArrayList<String>();
@@ -35,12 +45,11 @@ public class TicketPageUtil {
 				int i=0;
 				@Override
 				public void run() {
-					String ywNum = "";
+					Map<String, String> checkMap = new HashMap<String, String>();
 					while(flag){
 						System.out.println("---------------"+(i++)+"'s check-----------------------");
-						String newString = null;
 						try {
-							newString = new String(HttpsUtil.getMethod(url));
+							String newString = new String(HttpsUtil.getMethod(url));
 							Map<String,Object> map = JsonUtils.toMap(newString);
 							JSONObject trainsStr = (JSONObject) map.get("data");
 							if(trainsStr!=null){
@@ -49,26 +58,41 @@ public class TicketPageUtil {
 								if(trainListStr!=null){
 									List<Ticket> list = JsonUtils.stringToObj(trainListStr.toString(), new TypeReference<List<Ticket>>(){});
 									if(list!=null){
+										String msg = "";
 										for(Ticket ticket:list){
-											for(String train:TRAINLIST){
-												if(ticket.getStation_train_code().equals(train)){
-													System.out.println(train+" surplus of "+ticket.getZe_num()+"");
-													if(!ywNum.equals(ticket.getZe_num())){
-														System.out.println("send msg!!");
-														ywNum = ticket.getZe_num();
-														System.out.println("车票提醒"+ train+"次车还剩"+ticket.getZe_num()+"张");
-														SendEmailUtil.sendEmal("1015947808@qq.com", "车票提醒"+ticket.getZe_num()+"张", "车票提醒"+ train+"次车还剩"+ticket.getZe_num()+"张");
-//														JPushHelper.getInstance().pushRegistration(strs, "车票提醒", train+"次车还剩"+ticket.getYw_num()+"张");
-													}
-													break;
+											//时间过滤
+											if (TIMERANGE!=null && TIMERANGE.size() == 2) {
+												if ("24:00".equals(ticket.getStart_time()) || DateUtils.compareTime(ticket.getStart_time(), TIMERANGE.get(0)) < 0
+														|| DateUtils.compareTime(ticket.getStart_time(), TIMERANGE.get(1)) > 0) {
+													continue;
 												}
 											}
+											//车次过滤
+											if (TRAINLIST != null && TRAINLIST.size() >0){
+												if (!TRAINLIST.containsKey(ticket.getStation_train_code())) {
+													continue;
+												}
+											}
+											String need = ticket.getStation_train_code().startsWith("G")?ticket.getZe_num():ticket.getYw_num();
+											System.out.print(ticket.getStation_train_code()+" surplus of "+need +" ");
+											if (checkMap.get(ticket.getStation_train_code()) == null) {
+												checkMap.put(ticket.getStation_train_code(), need);
+											}
+											if(!checkMap.get(ticket.getStation_train_code()).equals(need)){
+												System.out.println("send msg!!");
+												checkMap.put(ticket.getStation_train_code(), need);
+												msg += "车票提醒"+ ticket.getStation_train_code()+"次车还剩"+ticket.getZe_num()+"张 ";
+//														JPushHelper.getInstance().pushRegistration(strs, "车票提醒", train+"次车还剩"+ticket.getYw_num()+"张");
+											}
 										}
+										if (StringUtil.isNotEmpty(msg))
+											SendEmailUtil.sendEmal("1015947808@qq.com", "车票提醒", msg);
+										System.out.println("");
 									}
 								}
 							}
 							try {
-								Thread.sleep(5000);
+								Thread.sleep(500);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}

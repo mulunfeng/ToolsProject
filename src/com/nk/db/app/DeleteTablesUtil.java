@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.nk.db.util.DataSource;
+import com.nk.excel.util.FileUtil;
 
 /**
  * 删除空表
@@ -28,7 +29,7 @@ public abstract class DeleteTablesUtil {
 //		tables.add("test");
 //		tables.add("T_ACCIDENT_RECORD");
 //		tables.add("T_ANTIMINE_RING");
-		DeleteTablesUtil.writeToFile("###############");
+		FileUtil.writeToFile(PATH, "###############");
 		
 		
 		DeleteTablesUtil.generator("oracle", "jdbc:oracle:thin:@192.168.10.208:1521:oradb",
@@ -101,19 +102,19 @@ public abstract class DeleteTablesUtil {
 						sqlBuilder.append("DROP TABLE "+table+" CASCADE CONSTRAINTS");
 						stmt.execute(sqlBuilder.toString());
 						deleteTable.add(table);
-						DeleteTablesUtil.writeToFile(table+"已删除(*^__^*)");
+						FileUtil.writeToFile(PATH, table+"已删除(*^__^*)");
 					}else{
 						haveDataTable.add(table);
-						DeleteTablesUtil.writeToFile(table+"已有数据删除失败-----------");
+						FileUtil.writeToFile(PATH, table+"已有数据删除失败-----------");
 					}
 				}else{
-					DeleteTablesUtil.writeToFile(table+"表不存在");
+					FileUtil.writeToFile(PATH, table+"表不存在");
 					notExists.add(table);
 				}
 			}
 			String str = "结束！删除"+deleteTable.size()+"个、有数据未删除"+haveDataTable.size()+"个、不存在"+notExists.size()+"个";
 			System.out.println(str);
-			DeleteTablesUtil.writeToFile(str);
+			FileUtil.writeToFile(PATH, str);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -149,30 +150,5 @@ public abstract class DeleteTablesUtil {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	private static void writeToFile(String data){
-		BufferedWriter bufferedWriter = null;
-        try {
-
-            //Construct the BufferedWriter object
-            bufferedWriter = new BufferedWriter(new FileWriter(PATH,true));
-
-            //Start writing to the output stream
-            bufferedWriter.write(data);
-            bufferedWriter.newLine();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (bufferedWriter != null) {
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
 	}
 }

@@ -1,8 +1,4 @@
 package com.nk.db.app;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -23,6 +19,7 @@ import com.nk.db.entity.Column;
 import com.nk.db.entity.Table;
 import com.nk.db.util.ConvertUtil;
 import com.nk.db.util.DataSource;
+import com.nk.excel.util.FileUtil;
 
 /**
  * 数据库全文检索
@@ -37,7 +34,7 @@ public abstract class SearchDatabaseUtil {
 	private static String PATH = "D:/search_database.log";
 	public static void main(String[] args) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SearchDatabaseUtil.writeToFile(sdf.format(new Date()));
+		FileUtil.writeToFile(PATH, sdf.format(new Date()));
 		
 		SearchDatabaseUtil.generator("oracle", "jdbc:oracle:thin:@192.168.10.207:1512:oradb",
 				"xmgdd", "xmgdd");
@@ -171,7 +168,7 @@ public abstract class SearchDatabaseUtil {
 							}
 							if(existData){
 								System.out.println("*********************检索到数据"+table.getTableName()+"===="+column.getName());
-								SearchDatabaseUtil.writeToFile(table.getTableName()+"===="+column.getName());
+								FileUtil.writeToFile(PATH, table.getTableName()+"===="+column.getName());
 							}
 						}
 					}
@@ -294,29 +291,5 @@ public abstract class SearchDatabaseUtil {
 			}
 		}
 	}
-	private static void writeToFile(String data){
-		BufferedWriter bufferedWriter = null;
-        try {
 
-            //Construct the BufferedWriter object
-            bufferedWriter = new BufferedWriter(new FileWriter(PATH,true));
-
-            //Start writing to the output stream
-            bufferedWriter.write(data);
-            bufferedWriter.newLine();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (bufferedWriter != null) {
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-	}
 }
