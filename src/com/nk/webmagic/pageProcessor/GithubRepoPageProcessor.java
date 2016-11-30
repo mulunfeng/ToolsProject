@@ -1,16 +1,6 @@
 package com.nk.webmagic.pageProcessor;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
-
+import com.nk.db.util.DataSource;
 import com.nk.jedis.JedisUtil;
 import com.nk.util.Md5Utils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -19,7 +9,14 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import com.nk.db.util.DataSource;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
+import java.util.UUID;
 
 public class GithubRepoPageProcessor implements PageProcessor {
 

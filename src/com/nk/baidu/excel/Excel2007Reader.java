@@ -1,9 +1,5 @@
 package com.nk.baidu.excel;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -15,6 +11,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 public class Excel2007Reader extends DefaultHandler implements ExcelReader {
 	// 共享字符串表

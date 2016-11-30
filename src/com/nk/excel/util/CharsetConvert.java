@@ -1,10 +1,10 @@
 package com.nk.excel.util;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.ArrayUtils;
 
 /**
  * 编码转换工具类

@@ -1,15 +1,11 @@
 package com.nk.webmagic.pageProcessor;
 
-import java.util.List;
-import java.util.Properties;
-
-import com.nk.db.app.SearchDatabaseUtil;
-import com.nk.db.entity.Table;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
+
+import java.util.List;
 
 public class OschinaBlogPageProcesser implements PageProcessor {
 

@@ -1,25 +1,21 @@
 package com.nk.ticket;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.nk.email.send.SendEmailUtil;
 import com.nk.excel.util.DateUtils;
 import com.nk.excel.util.StringUtil;
-import org.codehaus.jackson.type.TypeReference;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.nk.ticket.model.Ticket;
 import com.nk.ticket.util.HttpsUtil;
 import com.nk.ticket.util.JPushHelper;
 import com.nk.ticket.util.JsonUtils;
+import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 车票监控

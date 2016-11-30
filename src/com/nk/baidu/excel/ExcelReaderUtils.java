@@ -1,16 +1,12 @@
 package com.nk.baidu.excel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PushbackInputStream;
-
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.xml.sax.SAXException;
+
+import java.io.*;
 
 public class ExcelReaderUtils {
 

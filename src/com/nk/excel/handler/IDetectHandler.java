@@ -1,10 +1,10 @@
 package com.nk.excel.handler;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public interface IDetectHandler extends RowReaderHandler {
 

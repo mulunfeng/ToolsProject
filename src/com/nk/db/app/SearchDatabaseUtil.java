@@ -1,18 +1,4 @@
 package com.nk.db.app;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import com.nk.db.constant.EntityConstant;
 import com.nk.db.entity.Column;
@@ -20,6 +6,11 @@ import com.nk.db.entity.Table;
 import com.nk.db.util.ConvertUtil;
 import com.nk.db.util.DataSource;
 import com.nk.excel.util.FileUtil;
+
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Date;
 
 /**
  * 数据库全文检索

@@ -1,13 +1,12 @@
 package com.nk.baidu.app;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.nk.baidu.helper.ReadFileHelper;
 import com.nk.excel.util.FileUtil;
 import org.apache.commons.lang.StringUtils;
 
-import com.nk.baidu.helper.ReadFileHelper;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Baidu {
 

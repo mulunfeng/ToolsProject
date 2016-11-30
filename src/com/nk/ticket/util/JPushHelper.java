@@ -1,8 +1,8 @@
 package com.nk.ticket.util;
 
-import java.util.List;
-
 import cn.jpush.api.JPushClient;
+
+import java.util.List;
 
 public class JPushHelper {
 

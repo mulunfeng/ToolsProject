@@ -1,12 +1,9 @@
 package com.nk.baidu.helper;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-
+import com.nk.baidu.excel.ExcelReaderUtils;
+import com.nk.baidu.excel.RowReaderHandler;
+import com.nk.baidu.excel.XCell;
+import com.nk.baidu.excel.XRow;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -25,10 +22,7 @@ import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.xmlbeans.XmlException;
 
-import com.nk.baidu.excel.ExcelReaderUtils;
-import com.nk.baidu.excel.RowReaderHandler;
-import com.nk.baidu.excel.XCell;
-import com.nk.baidu.excel.XRow;
+import java.io.*;
 
 public abstract class ReadFileHelper {
 	

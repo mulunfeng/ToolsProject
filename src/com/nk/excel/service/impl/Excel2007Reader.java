@@ -1,9 +1,9 @@
 package com.nk.excel.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
+import com.nk.excel.entity.XCell;
+import com.nk.excel.entity.XRow;
+import com.nk.excel.handler.RowReaderHandler;
+import com.nk.excel.service.ExcelReader;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -16,10 +16,9 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.nk.excel.entity.XCell;
-import com.nk.excel.entity.XRow;
-import com.nk.excel.handler.RowReaderHandler;
-import com.nk.excel.service.ExcelReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 public class Excel2007Reader extends DefaultHandler implements ExcelReader {
 	// 共享字符串表

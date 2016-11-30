@@ -5,7 +5,10 @@ import com.nk.util.SystemClock;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
@@ -90,22 +93,27 @@ public class Test {
         }
     }
 
+        @org.junit.Test
+        public void testSort(){
+            List<Student> list = new ArrayList<Student>();
+            list.add(new Student("1", "mulunfeng", 24));
+            list.add(new Student("2", "mulunfeng", 26));
+
+            Collections.sort(list);   //排序
+
+            Student student = new Student("2", "mulunfeng", 26);
+
+            //检索student在list中的位置
+            int index1 = list.indexOf(student);//indexOf调用equals比较，比较的是name
+            int index2 = Collections.binarySearch(list, student);//binarySearch调用compareTo比较，比较的是age
+
+            System.out.println("index1 = " + index1);
+            System.out.println("index2 = " + index2);
+        }
+
     @org.junit.Test
-    public void testSort(){
-        List<Student> list = new ArrayList<Student>();
-        list.add(new Student("1", "mulunfeng", 24));
-        list.add(new Student("2", "mulunfeng", 26));
-
-        Collections.sort(list);   //排序
-
-        Student student = new Student("2", "mulunfeng", 26);
-
-        //检索student在list中的位置
-        int index1 = list.indexOf(student);//indexOf调用equals比较，比较的是name
-        int index2 = Collections.binarySearch(list, student);//binarySearch调用compareTo比较，比较的是age
-
-        System.out.println("index1 = " + index1);
-        System.out.println("index2 = " + index2);
+    public void testEncode(){
+        System.out.println(System.getProperty("file.encoding"));
     }
 }
 

@@ -1,15 +1,12 @@
 package com.nk.hbase;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.nk.db.util.DbToVoUtils;
-import com.nk.hbase.entity.WebPageInfo;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.IOException;
+import java.util.List;
 
 public class HbaseUtils {
 

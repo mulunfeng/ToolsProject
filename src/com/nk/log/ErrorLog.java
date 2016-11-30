@@ -23,7 +23,7 @@ public class ErrorLog {
             BufferedReader reader = null;
             try {
                 is = new FileInputStream("C:\\Users\\zhangyuyang1\\Desktop\\bug库\\app_error.log");
-                // 必须设置成GBK，否则将出现乱码
+                // 处理乱码
                 reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 String line = "";
                 String temp = null;

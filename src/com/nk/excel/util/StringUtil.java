@@ -1,5 +1,13 @@
 package com.nk.excel.util;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.net.URLCodec;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -11,15 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /*
  * 创建日期 2005-7-6 

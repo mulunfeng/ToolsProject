@@ -1,12 +1,11 @@
 package com.nk.db.util;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.nk.db.constant.OracleTypeConstant;
 import org.apache.commons.lang.StringUtils;
 
-import com.nk.db.constant.OracleTypeConstant;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 功能概述：转换类名和属性工具类 <br>
