@@ -1,7 +1,8 @@
 package com.nk.webmagic.pageProcessor;
 
 import com.nk.db.util.DataSource;
-import com.nk.jedis.JedisUtil;
+import com.nk.redis.IRedisClient;
+import com.nk.redis.RedisClientFactory;
 import com.nk.util.Md5Utils;
 import org.apache.commons.lang.StringEscapeUtils;
 import us.codecraft.webmagic.Page;
@@ -27,9 +28,11 @@ public class GithubRepoPageProcessor implements PageProcessor {
     // process是定制爬虫逻辑的核心接口，在这里编写抽取逻辑
     public void process(Page page) {
         // 部分二：定义如何抽取页面信息，并保存下来
+		IRedisClient redisClient= RedisClientFactory.createRedisClient("127.0.0.1",6379);
+
 		try {
-			if(JedisUtil.getStr(Md5Utils.encode(page.getRequest().getUrl())) == null){
-                JedisUtil.set(Md5Utils.encode(page.getRequest().getUrl()),new Date().getTime());
+			if(redisClient.get(Md5Utils.encode(page.getRequest().getUrl())) == null){
+				redisClient.set(Md5Utils.encode(page.getRequest().getUrl()),String.valueOf(new Date().getTime()));
                 WebPageInfo webPageInfo = new WebPageInfo();
                 webPageInfo.setCreateTime(new Date());
                 webPageInfo.setUpdateTime(new Date());

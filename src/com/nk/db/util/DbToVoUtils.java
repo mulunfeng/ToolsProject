@@ -104,5 +104,34 @@ public class DbToVoUtils {
         Properties pro = getProp(dbConn, username, password);
         return getCount(pro, clazz);
     }
+
+    public static <T> void insertDb(List<T> list) throws Exception {
+        Properties pro = getProp(dbConn, username, password);
+        insert(pro, list);
+    }
+
+    private static <T> void insert(Properties pro, List<T> list) throws Exception {
+        Statement stmt = null;
+        Connection conn = DaoUtils.getConnection(pro);
+        try {
+            stmt = conn.createStatement();
+            DaoUtils.insert(list, stmt);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                    stmt = null;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 

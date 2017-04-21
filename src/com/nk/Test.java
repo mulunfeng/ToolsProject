@@ -1,10 +1,10 @@
 package com.nk;
 
+import com.nk.redis.IRedisClient;
+import com.nk.redis.RedisClientFactory;
 import com.nk.util.SystemClock;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,6 +16,38 @@ import static java.lang.Thread.sleep;
  * Created by zhangyuyang1 on 2016/10/31.
  */
 public class Test {
+    @org.junit.Test
+    public void testRandomString(){
+//        System.out.println(RandomString(5));
+        Random random = new Random();
+        Long total = 0L;
+        for (int i=0;i<10000000;i++) {
+            if (random.nextInt(10) == 10) {
+                System.out.println("123");
+            }
+        }
+    }
+
+    /** 产生一个随机的字符串*/
+    public static String RandomString(int length) {
+        String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int num = random.nextInt(36);
+            buf.append(str.charAt(num));
+        }
+        return buf.toString();
+    }
+
+
+    @org.junit.Test
+    public void testFinal(){
+        final StringBuilder sb = new StringBuilder("123");
+        sb.append("改了");
+        System.out.println(sb.toString());
+    }
+
     @org.junit.Test
     public void testSystemClock(){
         System.out.println(SystemClock.getInstance().now());
@@ -54,6 +86,31 @@ public class Test {
         service.scheduleAtFixedRate(new Print(1),100, 100, TimeUnit.MILLISECONDS);
         sleeps(2000);
     }
+    @org.junit.Test
+    public void compareData(){
+        String[] str = new String[]{
+                "13660274929570",
+                "13631129309155",
+                "13637505474125"
+        };
+
+        String[] target = new String[]{
+                "13660275226868",
+                "13660414100084",
+                "13660718842238"
+        };
+        for (String ss:str) {
+            boolean flag = false;
+            for (String tar : target) {
+                if (ss.equals(tar)){
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+                System.out.println(ss);
+        }
+    }
 
     private void sleeps(int i) {
         try {
@@ -74,8 +131,29 @@ public class Test {
     }
 
     @org.junit.Test
-    public void testScheduledFuture(){
+    public void testThreadRedis() throws Exception {
+        IRedisClient redisClient= RedisClientFactory.createRedisClient("127.0.0.1",6379);
 
+        for (int i=0; i< 100000 ;i++) {
+            new Thread(new JedisRun(String.valueOf(i),"hello",redisClient)).start();
+        }
+    }
+
+    class JedisRun implements Runnable{
+        private String key;
+        private String value;
+        private IRedisClient redisClient;
+
+        public JedisRun(String key, String value, IRedisClient redisClient) {
+            this.key = key;
+            this.value = value;
+            this.redisClient = redisClient;
+        }
+
+        @Override
+        public void run() {
+            redisClient.set(key, value);
+        }
     }
 
     @org.junit.Test
@@ -114,6 +192,20 @@ public class Test {
     @org.junit.Test
     public void testEncode(){
         System.out.println(System.getProperty("file.encoding"));
+    }
+
+    @org.junit.Test
+    public void testHash(){
+        Set<Person> set = new HashSet<Person>();
+        Person person = new Person();
+        person.setName("123");
+        person.setSex("男");
+        Person person1 = new Person();
+        person1.setName("123");
+        person1.setSex("女");
+        set.add(person);
+        set.add(person1);
+        System.out.println(set.size());
     }
 }
 
@@ -197,3 +289,37 @@ class Student implements Comparable<Student>{
     }
 }
 
+
+class Person {
+    private String name;
+    private String sex;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    @Override
+    public int hashCode() {
+        System.out.println("调用hashCode");
+        return name.length();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println("调用equals");
+        return this.name.equals(((Person)obj).getName());
+    }
+
+}

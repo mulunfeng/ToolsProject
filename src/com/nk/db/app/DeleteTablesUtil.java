@@ -23,7 +23,6 @@ public abstract class DeleteTablesUtil {
 	private static String CREBASPATH = "C:/Users/young/Desktop/crebas.sql";
 	public static void main(String[] args) {
 //		List<String> tables = new ArrayList<String>();
-//		tables.add("test");
 //		tables.add("T_ACCIDENT_RECORD");
 //		tables.add("T_ANTIMINE_RING");
 		FileUtil.writeToFile(PATH, "###############");

@@ -3,6 +3,7 @@ package com.nk.db.util;
 import com.nk.db.constant.OracleTypeConstant;
 import com.nk.db.entity.ColumnTag;
 import com.nk.db.entity.TableTag;
+import com.nk.excel.util.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayInputStream;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.Date;
 
@@ -206,5 +208,68 @@ public class DaoUtils {
         sqlBuilder.append("count(1)");
         sqlBuilder.append(" from ").append(tableName);
         return sqlBuilder;
+    }
+
+    public static <T> void insert(List<T> list, Statement stmt) throws Exception {
+        String insertSql = getInsertEntitySql(list.get(0));
+        insertSql = MessageFormat.format(insertSql, getParameterValueAll(list.get(0)));
+        stmt.executeUpdate(insertSql);
+    }
+
+    private static Object[] getParameterValueAll(Object obj) throws Exception {
+        List list = new ArrayList();
+        Method[] methods = obj.getClass().getMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].isAnnotationPresent(ColumnTag.class)) {
+                Object myobj = methods[i].invoke(obj, new Object[] {});
+                Class returnType = methods[i].getReturnType();
+                if (returnType != null) {
+                    if (returnType.getSimpleName().equals("Date")) {
+                        myobj = DateUtils.toDateTimeString((Date) myobj);
+                    }
+                }
+                list.add("'"+myobj+"'");
+            }
+        }
+        return list.toArray();
+
+    }
+
+    private static <T> String getInsertEntitySql(Object obj) {
+        StringBuffer sb = new StringBuffer();
+        if (obj.getClass().isAnnotationPresent(TableTag.class)) {
+            TableTag des = obj.getClass().getAnnotation(TableTag.class);
+            String tableName = des.name();
+            sb.append(" insert into ").append(tableName).append(" (");
+        }
+        Method[] methods = obj.getClass().getMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].isAnnotationPresent(ColumnTag.class)) {
+                ColumnTag nkProperty = methods[i]
+                        .getAnnotation(ColumnTag.class);
+                String propertyName = nkProperty.name();
+                if (StringUtils.isBlank(propertyName)) {
+                    propertyName = getColoumName(methods[i]);
+                }
+                sb.append(propertyName).append(",");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(") values (");
+        int j=0;
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].isAnnotationPresent(ColumnTag.class)) {
+                methods[i].getAnnotation(ColumnTag.class);
+                sb.append("{"+j+++"},");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(")");
+        return sb.toString();
+    }
+
+    private static String getColoumName(Method method) {
+        String first = method.getName().substring(3,4);
+        return method.getName().substring(3).replaceFirst(first , first.toLowerCase());
     }
 }

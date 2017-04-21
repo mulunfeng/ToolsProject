@@ -1,10 +1,14 @@
 package com.nk.webmagic.pageProcessor;
 
+import com.nk.db.entity.ColumnTag;
+import com.nk.db.entity.TableTag;
+
 import java.util.Date;
 
 /**
  * Created by zhangyuyang1 on 2016/10/31.
  */
+@TableTag(name="webpageinfo")
 public class WebPageInfo {
     private Integer id;
     private String webUrl;
@@ -12,6 +16,7 @@ public class WebPageInfo {
     private Date createTime;
     private Date updateTime;
 
+    @ColumnTag(name = "id")
     public Integer getId() {
         return id;
     }
@@ -20,6 +25,7 @@ public class WebPageInfo {
         this.id = id;
     }
 
+    @ColumnTag(name = "webUrl")
     public String getWebUrl() {
         return webUrl;
     }
@@ -28,6 +34,7 @@ public class WebPageInfo {
         this.webUrl = webRul;
     }
 
+    @ColumnTag(name = "pageInfo")
     public String getPageInfo() {
         return pageInfo;
     }
@@ -36,6 +43,7 @@ public class WebPageInfo {
         this.pageInfo = pageInfo;
     }
 
+    @ColumnTag(name = "createTime")
     public Date getCreateTime() {
         return createTime;
     }
@@ -44,6 +52,7 @@ public class WebPageInfo {
         this.createTime = createTime;
     }
 
+    @ColumnTag(name = "updateTime")
     public Date getUpdateTime() {
         return updateTime;
     }

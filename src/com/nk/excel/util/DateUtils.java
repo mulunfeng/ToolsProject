@@ -321,8 +321,8 @@ public class DateUtils {
 	 * @param time2
 	 * @return
 	 */
-	public static int compareTime(String time1, String time2) {
-		return compareTime(time1, time2, Format_Time);
+	public static int compareDateTime(String time1, String time2) {
+		return compare(time1, time2, Format_DateTime);
 	}
 
 	public static void main(String[] args) {
@@ -350,10 +350,9 @@ public class DateUtils {
 	 * 
 	 * @param time1
 	 * @param time2
-	 * @param format
 	 * @return
 	 */
-	public static int compareTime(String time1, String time2, String format) {
+	public static int compareTime(String time1, String time2) {
 		String[] arr1 = time1.split(":");
 		String[] arr2 = time2.split(":");
 		if (arr1.length < 2) {

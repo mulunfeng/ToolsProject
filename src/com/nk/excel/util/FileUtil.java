@@ -1,12 +1,15 @@
 package com.nk.excel.util;
 
+import com.nk.util.Closeables;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 
@@ -265,12 +268,12 @@ public class FileUtil {
 		try {
 			BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(fileName));
 			fos.write(b);
-			fos.close();
-			return true;
+			Closeables.close(fos);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -281,7 +284,7 @@ public class FileUtil {
 		try {
 			BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(f));
 			fos.write(b);
-			fos.close();
+			Closeables.close(fos);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -298,6 +301,102 @@ public class FileUtil {
 	}
 
 	/**
+	 * 递归获取目录下所有文件
+	 * @param filePath
+	 * @return
+     */
+	public static Set<File> getFilesByPath(String filePath) {
+		File file = new File(filePath);
+		if (!file.exists())
+			throw new IllegalArgumentException("file not exits");
+
+		return getFilesByPath(file);
+	}
+
+	/**
+	 * 递归获取目录下所有文件及文件夹
+	 * @param filePath
+	 * @return
+     */
+	public static Set<File> getFileAndPath(String filePath) {
+		File file = new File(filePath);
+		if (!file.exists())
+			throw new IllegalArgumentException("file not exits");
+
+		return getFileAndPath(file);
+	}
+
+	public static Set<File> getFileAndPath(File file) {
+		if (file == null || !file.exists())
+			throw new IllegalArgumentException("file not exits");
+
+		Set<File> files = new HashSet<File>();
+		if (file.isDirectory()) {
+			File[] fileArr = file.listFiles();
+			for (File temp : fileArr) {
+				files.add(temp);
+				if (temp.isDirectory()) {
+					files.addAll(getFileAndPath(temp));
+				}
+			}
+		} else {
+			files.add(file);
+		}
+
+		return files;
+	}
+
+	/**
+	 *
+	 * @param file
+	 * @return
+	 */
+	public static Set<File> getFilesByPath(File file) {
+		if (file == null || !file.exists())
+			throw new IllegalArgumentException("file not exits");
+
+		Set<File> files = new HashSet<File>();
+		if (file.isDirectory()) {
+			File[] fileArr = file.listFiles();
+			for (File temp : fileArr) {
+				if (temp.isDirectory()) {
+					files.addAll(getFilesByPath(temp));
+				} else {
+					files.add(temp);
+				}
+			}
+		} else {
+			files.add(file);
+		}
+
+		return files;
+	}
+
+	/**
+	 * 检索当前目录文件，不级联查找
+	 * @param file
+	 * @return
+     */
+	public static Set<File> getFilesByCurrentPath(File file) {
+		if (file == null || !file.exists())
+			throw new IllegalArgumentException("file not exits");
+
+		Set<File> files = new HashSet<File>();
+		if (file.isDirectory()) {
+			File[] fileArr = file.listFiles();
+			for (File temp : fileArr) {
+				if (!temp.isDirectory()) {
+					files.add(temp);
+				}
+			}
+		} else {
+			files.add(file);
+		}
+
+		return files;
+	}
+
+	/**
 	 * 以指定编码读取指定文件中的文本
 	 */
 	public static String readText(File f, String encoding) {
@@ -309,8 +408,8 @@ public class FileUtil {
 			return str;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	/**
@@ -715,4 +814,11 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+
+	public static void createFilePath(String path) {
+		File pathFile = new File(path);
+		if (!pathFile.exists()) {
+			pathFile.mkdirs();
+		}
+	}
 }
