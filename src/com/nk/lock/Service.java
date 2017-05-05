@@ -1,30 +1,32 @@
 package com.nk.lock;
-
-import com.nk.excel.util.StringUtil;
-import com.nk.redis.IRedisClient;
-import com.nk.redis.RedisClientFactory;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
- * Created by liuyang on 2017/4/20.
+ * Created by zhangyuyang on 2017/4/20.
  */
 public class Service {
-    private static IRedisClient redisClient = null;
+    private static JedisPool pool = null;
 
     static {
-        redisClient = RedisClientFactory.createRedisClient("127.0.0.1", 6379);
+        JedisPoolConfig config = new JedisPoolConfig();
+        // 设置最大连接数
+        config.setMaxTotal(200);
+        // 设置最大空闲数
+        config.setMaxIdle(8);
+        // 设置最大等待时间
+        config.setMaxWaitMillis(1000 * 100);
+        // 在borrow一个jedis实例时，是否需要验证，若为true，则所有jedis实例均是可用的
+        config.setTestOnBorrow(true);
+        pool = new JedisPool(config, "127.0.0.1", 6379, 3000);
     }
 
-    RedisLock lock = new RedisLock(redisClient);
+    RedisLock lock = new RedisLock(pool);
     int n = 500;
-
-    public void seckill() {
+    public void seckill(){
         // 返回锁的value值，供释放锁时候进行判断
         String indentifier = lock.lockWithTimeout("resource", 5000, 1000);
         System.out.println(Thread.currentThread().getName() + "获得了锁" + indentifier);
-        if (StringUtil.isEmpty(indentifier)) {
-            System.out.println("获取锁超时");
-            return;
-        }
         System.out.println(--n);
         lock.releaseLock("resource", indentifier);
     }

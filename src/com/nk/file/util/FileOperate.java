@@ -10,9 +10,6 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.Charset;
 
-/**
- * Created by zhangkepeng on 15-8-24.
- */
 public class FileOperate {
 
     private static final Logger logger = LoggerFactory.getLogger(FileOperate.class);

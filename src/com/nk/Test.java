@@ -3,6 +3,7 @@ package com.nk;
 import com.nk.redis.IRedisClient;
 import com.nk.redis.RedisClientFactory;
 import com.nk.util.SystemClock;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -206,6 +207,11 @@ public class Test {
         set.add(person);
         set.add(person1);
         System.out.println(set.size());
+    }
+
+    @org.junit.Test
+    public void testAA(){
+        System.out.println(StringUtils.equals(null, "false"));
     }
 }
 
