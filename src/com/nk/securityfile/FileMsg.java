@@ -40,7 +40,7 @@ public class FileMsg {
         rootPath = rootPath.replaceAll("/", "\\\\");
         this.filePath = filePath;
         this.fileName = filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.length());
-        this.relativePath = filePath.substring(rootPath.length() + 1);
+        this.relativePath = filePath.substring(rootPath.lastIndexOf("\\")+1);
         this.skip = skip;
         this.directory = file.isDirectory();
     }
