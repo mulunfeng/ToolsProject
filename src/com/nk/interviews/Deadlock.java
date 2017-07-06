@@ -7,7 +7,7 @@ package com.nk.interviews;
  *  不剥夺条件
  *  循环等待条件
  */
-public class DeadLock {
+public class Deadlock {
     public static void main(String[] args) {
         Thread t1 = new Thread(new DeadLockThread(true));
         Thread t2 = new Thread(new DeadLockThread(false));

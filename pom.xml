@@ -8,6 +8,7 @@
 
 	<properties>
 		<version.jackson.core>2.6.3</version.jackson.core>
+		<jackson.version>2.8.8</jackson.version>
 	</properties>
 
   <dependencies>
@@ -116,6 +117,12 @@
 	  <dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-beans</artifactId>
+		  <version>3.2.6.RELEASE</version>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-webmvc</artifactId>
 		  <version>3.2.6.RELEASE</version>
 	  </dependency>
 		
@@ -244,6 +251,11 @@
 		  <groupId>com.fasterxml.jackson.core</groupId>
 		  <artifactId>jackson-databind</artifactId>
 		  <version>${version.jackson.core}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-annotations</artifactId>
+		  <version>${jackson.version}</version>
 	  </dependency>
 
 	  <dependency>

@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 public class DbToVoUtils {
 
-    private final static String dbConn = "jdbc:mysql://127.0.0.1:3306/test?createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;useUnicode=true";
+    private final static String dbConn = "jdbc:mysql://10.1.11.180:3306/test?createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;useUnicode=true";
     private final static String username = "root";
     private final static String password = "root";
 
@@ -49,6 +49,17 @@ public class DbToVoUtils {
         return null;
     }
 
+    public static <T> List getDataFromDB(String url, String username, String password, Class<T> clazz, String sql) {
+        Properties pro = getProp(url,username,password);
+        try {
+            List<T> projectList = getList(pro, clazz.newInstance(), sql);
+            return projectList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static <T> List<T> getList(Properties pro, T obj, int from, int pageSize) throws Exception {
         Statement stmt = null;
         Connection conn = DaoUtils.getConnection(pro);
@@ -63,6 +74,29 @@ public class DbToVoUtils {
                 if (stmt != null) {
                     stmt.close();
                     stmt = null;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static <T> List<T> getList(Properties pro, T obj, String sql){
+        Statement stmt = null;
+        Connection conn = DaoUtils.getConnection(pro);
+        try {
+            stmt = conn.createStatement();
+            List<T> list = DaoUtils.getList(obj, stmt,sql);
+            return list;
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

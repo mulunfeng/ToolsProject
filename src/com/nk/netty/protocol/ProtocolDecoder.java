@@ -52,9 +52,9 @@ public class ProtocolDecoder extends LengthFieldBasedFrameDecoder {
 	protected ProtocolMsg decode(ChannelHandlerContext ctx, ByteBuf in2) throws Exception {
 		ByteBuf in = (ByteBuf) super.decode(ctx, in2);
 		if (in == null) {
-		    return null;
+			return null;
 		}
-		
+
 		if (in.readableBytes() < HEADER_SIZE) {
 			return null;// response header is 10 bytes
 		}

@@ -211,9 +211,11 @@ public class DaoUtils {
     }
 
     public static <T> void insert(List<T> list, Statement stmt) throws Exception {
-        String insertSql = getInsertEntitySql(list.get(0));
-        insertSql = MessageFormat.format(insertSql, getParameterValueAll(list.get(0)));
-        stmt.executeUpdate(insertSql);
+        for (T t : list) {
+            String insertSql = getInsertEntitySql(list.get(0));
+            insertSql = MessageFormat.format(insertSql, getParameterValueAll(t));
+            stmt.executeUpdate(insertSql);
+        }
     }
 
     private static Object[] getParameterValueAll(Object obj) throws Exception {
